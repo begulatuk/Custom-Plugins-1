@@ -20,8 +20,8 @@ CONVERTED_IMG = Config.DOWN_PATH + "img.png"
     'header': "Custom Sticker of Jokowi Tweet",
     'usage': "{tr}jokowi [text | reply to text]"})
 async def jokowi_tweet(msg: Message):
-    """ Fun sticker of Trump Tweet """
-    replied = msg.reply_to_message
+    """ Fun sticker of Jokowi Tweet """
+    username = "jokowi"
     text = msg.input_str
     _LOG.info(text)
     if replied and not text:
@@ -30,8 +30,9 @@ async def jokowi_tweet(msg: Message):
         await msg.err("jokowi Need some Text for Tweet 🙄")
         return
     await msg.edit("```Requesting jokowi to tweet... 😃```")
-    await _tweets(msg, text, type_="jokowitweet")
+    await _tweets(msg, text, username)
     _LOG.info(text, _tweets)
+    
 
 
 
