@@ -22,7 +22,7 @@ CONVERTED_IMG = Config.DOWN_PATH + "img.png"
 async def jokowi_tweet(msg: Message):
     """ Fun sticker of Jokowi Tweet """
     replied = msg.reply_to_message
-    username = "jokowi"
+    username = jokowi
     text = msg.input_str
     _LOG.info(text)
     if replied and not text:
