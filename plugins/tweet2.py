@@ -22,7 +22,7 @@ CONVERTED_IMG = Config.DOWN_PATH + "img.png"
 async def jokowi_tweet(msg: Message):
     """ Fun sticker of Jokowi Tweet """
     replied = msg.reply_to_message
-    username = jokowi
+    username = "jokowi"
     text = msg.input_str
     _LOG.info(text)
     if replied and not text:
@@ -41,7 +41,7 @@ async def jokowi_tweet(msg: Message):
 async def _tweets(msg: Message, text: str, username: str = '', type_: str = "tweet") -> None:
     api_url = f"https://nekobot.xyz/api/imagegen?type={type_}&text={demojify(text)}"
     if username:
-        api_url += f"&username={demojify(username)}"
+        api_url = f"https://nekobot.xyz/api/imagegen?type=tweet&username={username}&text={text}"
     res = requests.get(api_url).json()
     tweets_ = res.get("message")
     if not url(tweets_):
