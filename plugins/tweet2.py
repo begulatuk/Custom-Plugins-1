@@ -17,20 +17,21 @@ CONVERTED_IMG = Config.DOWN_PATH + "img.png"
 
 
 @userge.on_cmd("jokowi", about={
-    'header': "Custom Sticker of Trump Tweet",
-    'usage': "{tr}trump [text | reply to text]"})
+    'header': "Custom Sticker of Jokowi Tweet",
+    'usage': "{tr}jokowi [text | reply to text]"})
 async def jokowi_tweet(msg: Message):
     """ Fun sticker of Trump Tweet """
     replied = msg.reply_to_message
     text = msg.input_str
+    _LOG.info(text)
     if replied and not text:
         text = replied.text
     if not text:
-        await msg.err("Trump Need some Text for Tweet 🙄")
+        await msg.err("jokowi Need some Text for Tweet 🙄")
         return
-    await msg.edit("```Requesting trump to tweet... 😃```")
+    await msg.edit("```Requesting jokowi to tweet... 😃```")
     await _tweets(msg, text, type_="jokowitweet")
-    _LOG.info(text, msg)
+    _LOG.info(text, _tweets)
 
 
 
