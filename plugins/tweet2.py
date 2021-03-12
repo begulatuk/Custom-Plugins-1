@@ -10,7 +10,7 @@ from validators.url import url
 
 from userge.utils import demojify
 from userge import userge, Config, Message
-
+from userge import logging
 _LOG = logging.getLogger(__name__)
 
 CONVERTED_IMG = Config.DOWN_PATH + "img.png"
