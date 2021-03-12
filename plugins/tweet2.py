@@ -21,12 +21,13 @@ CONVERTED_IMG = Config.DOWN_PATH + "img.png"
     'usage': "{tr}jokowi [text | reply to text]"})
 async def jokowi_tweet(msg: Message):
     """ Fun sticker of Jokowi Tweet """
+    replied = msg.reply_to_message
     username = "jokowi"
     text = msg.input_str
     _LOG.info(text)
     if replied and not text:
         text = replied.text
-    if not text:
+    if not (username or text):
         await msg.err("jokowi Need some Text for Tweet 🙄")
         return
     await msg.edit("```Requesting jokowi to tweet... 😃```")
