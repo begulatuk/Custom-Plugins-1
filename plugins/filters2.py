@@ -8,6 +8,7 @@
 #
 # All rights reserved.
 
+import re
 import asyncio
 from typing import Dict
 
