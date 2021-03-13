@@ -32,7 +32,7 @@ async def jokowi_tweet(msg: Message):
         return
     await msg.edit("```Requesting jokowi to tweet... 😃```")
     await _tweets(msg, text, username)
-    _LOG.info(text, username, @userge.on_cmd)
+    _LOG.info(text, username)
     
 
 
