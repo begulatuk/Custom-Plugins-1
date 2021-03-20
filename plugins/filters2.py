@@ -94,7 +94,7 @@ async def filters_active(message: Message) -> None:
             '-every': "remove all filters in every chats"},
         'usage': "{tr}delfilter [filter name | filter type]\n{tr}delfilter -all"},
     allow_channels=False, allow_bots=False)
-async def delete_filters(message: Message) -> None:
+async def delete_filtersx(message: Message) -> None:
     """ delete filter in current chat """
     if '-every' in message.flags:
         FILTERS_DATA.clear()
