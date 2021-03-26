@@ -181,7 +181,7 @@ async def chat_filter(message: Message) -> None:
             if name.startswith(':') and name.endswith(':'):
                 media_type = name.strip(':')
                 if getattr(message, media_type, None):
-                    await asyncio.sleep(10)
+                    await asyncio.sleep(20)
                     reply = True
             elif message.text:
                 l_name = name.lower()
@@ -193,7 +193,7 @@ async def chat_filter(message: Message) -> None:
                         or input_text.endswith(f" {l_name}")
                         or filter_text is not None
                         or f" {l_name} " in input_text):
-                    await asyncio.sleep(5)
+                    await asyncio.sleep(10)
                     reply = True
             if reply:
                 await CHANNEL.forward_stored(client=message.client,
