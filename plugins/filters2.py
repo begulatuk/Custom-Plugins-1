@@ -97,6 +97,7 @@ async def filters_active(message: Message) -> None:
 async def delete_filtersx(message: Message) -> None:
     """ delete filter in current chat """
     if '-every' in message.flags:
+        await asyncio.sleep(10)
         FILTERS_DATA.clear()
         await asyncio.gather(
             FILTERS_COLLECTION.drop(),
@@ -104,6 +105,7 @@ async def delete_filtersx(message: Message) -> None:
         return
     if '-all' in message.flags:
         if message.chat.id in FILTERS_DATA:
+            await asyncio.sleep(10)
             del FILTERS_DATA[message.chat.id]
             await asyncio.gather(
                 FILTERS_COLLECTION.delete_many({'chat_id': message.chat.id}),
