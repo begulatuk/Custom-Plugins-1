@@ -198,6 +198,7 @@ async def chat_filter(message: Message) -> None:
                     await asyncio.sleep(10)
                     reply = True
             if reply:
+                await asyncio.sleep(10)
                 await CHANNEL.forward_stored(client=message.client,
                                              message_id=FILTERS_DATA[message.chat.id][name],
                                              chat_id=message.chat.id,
