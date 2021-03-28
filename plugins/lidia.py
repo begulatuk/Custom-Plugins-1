@@ -54,7 +54,6 @@ async def _init():
               '-off': "Disable AI on replied user",
               '-list': "List All users",
               '-info': "Get Info about Lydia"},
-              '-grup': "grup"},
     'usage': "{tr}lydia [flag] [reply to user]"})
 async def lydia_session(message: Message):
     """ lydia command handler """
@@ -98,7 +97,7 @@ async def lydia_session(message: Message):
         del ACTIVE_CHATS[user_id]
         await message.edit("`AI Disable for Replied User`", del_in=3)
     # Group Features Won't be displayed in Help Info For Now 😉
-    elif '-grup' in message.flags:
+    elif '-enagrp' in message.flags:
         chat_id = message.chat.id
         if chat_id in ACTIVE_CHATS:
             await message.edit("AI is already Enabled on this chat", del_in=3)
@@ -202,10 +201,13 @@ async def lydia_queue() -> None:
         if (msg is None) or (out is None):
             break
         if msg.text:
+            await asyncio.sleep(10)
             await asyncio.sleep(len(msg.text) / 10)
         if msg.media or not out:
+            await asyncio.sleep(10)
             await _custom_media_reply(msg)
         else:
+            await asyncio.sleep(10)
             await _send_text_like_a_human(msg, out)
 
 
@@ -225,7 +227,6 @@ async def _custom_media_reply(message: Message):
             return
         if cus_msg.media:
             file_id = get_file_id_of_media(cus_msg)
-            
             try:
                 if cus_msg.animation:
                     await message.client.send_animation(
@@ -259,7 +260,6 @@ async def _custom_media_reply(message: Message):
                 await _custom_media_reply(message)
                 return
         if cus_msg.text:
-            await asyncio.sleep(10)
             await _send_text_like_a_human(message, cus_msg.text)
 
 
@@ -272,7 +272,6 @@ async def _send_text_like_a_human(message: Message, text: str) -> None:
         await asyncio.sleep(1)
         count += 1
     await message.reply_chat_action("cancel")
-    await asyncio.sleep(10)
     await message.reply(text)
 
 
