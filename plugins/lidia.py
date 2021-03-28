@@ -179,11 +179,13 @@ async def lydia_ai_chat(message: Message):
             ses_id = ses.id
         try:
             out = ''
+            await asyncio.sleep(10)
             await userge.send_read_acknowledge(
                 chat_id=chat_id,
                 message=message,
                 clear_mentions=True)
             if not message.media and message.text:
+                await asyncio.sleep(10)
                 out = await _think_lydia(ses_id, message.text)
             QUEUE.put_nowait((message, out))
         except CoffeeHouseError as cfe:
@@ -201,13 +203,10 @@ async def lydia_queue() -> None:
         if (msg is None) or (out is None):
             break
         if msg.text:
-            await asyncio.sleep(10)
             await asyncio.sleep(len(msg.text) / 10)
         if msg.media or not out:
-            await asyncio.sleep(10)
             await _custom_media_reply(msg)
         else:
-            await asyncio.sleep(10)
             await _send_text_like_a_human(msg, out)
 
 
@@ -217,12 +216,11 @@ async def lydia_queue() -> None:
 # Idea arised from here (https://t.me/usergeot/157629) thnx 👍
 async def _custom_media_reply(message: Message):
     if CUSTOM_REPLIES_IDS:
-        await asyncio.sleep(10)
+        await asyncio.sleep(1)
         cus_msg = int(random.choice(CUSTOM_REPLIES_IDS))
         cus_msg = await message.client.get_messages(chat_id=CUSTOM_REPLY_CHANNEL,
                                                     message_ids=cus_msg)
         if cus_msg.service:
-            await asyncio.sleep(10)
             await _custom_media_reply(message)
             return
         if cus_msg.media:
