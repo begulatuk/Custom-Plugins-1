@@ -62,7 +62,7 @@ async def delete_feed(url: str) -> str:
         out_str = f"""
 #DELETED_FEED_URL
 
-\t\t**FEED_URL:** `{url}`
+\t\t**FEED_ URL:** `{url}`
 """
         del RSS_DICT[url]
         await RSS_COLLECTION.delete_one({'url': url})
@@ -91,7 +91,7 @@ async def send_new_post(entries):
         author = entries.get('authors')[0]['name'].split('/')[-1]
         author_link = entries.get('authors')[0]['href']
 #    out_str = f"""
-    out_str = f"**/mirror**\n```{link}```"
+    out_str = f"**/mirror** ```{link}```"
 #**New post Found**
 
 #**Title:** `{title}`
@@ -120,7 +120,7 @@ async def send_new_post(entries):
             ChatWriteForbidden, ChannelPrivate, ChatIdInvalid,
             UserNotParticipant, UsergeBotNotFound
         ):
-            out_str += f"\n\n[View Post Online]({link})"
+            #out_str += f"\n\n[View Post Online]({link})"
             if 'caption' in args:
                 args.update({'caption': out_str})
             else:
