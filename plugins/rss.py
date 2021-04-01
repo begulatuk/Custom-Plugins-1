@@ -91,7 +91,7 @@ async def send_new_post(entries):
         author = entries.get('authors')[0]['name'].split('/')[-1]
         author_link = entries.get('authors')[0]['href']
 #    out_str = f"""
-     out_str = f"**/mirror** ```{link}```"
+     out_str = f"**/mirror**\n```{link}```"
 #**New post Found**
 
 #**Title:** `{title}`
