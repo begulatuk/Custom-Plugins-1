@@ -72,8 +72,46 @@ async def delete_feed(url: str) -> str:
 
 
 async def send_new_post(entries):
+    title = entries.get('title')
     link = entries.get('link')
-    if chat_id in RSS_CHAT_ID:
+    time = entries.get('published')
+    thumb = None
+    author = None
+    author_link = None
+
+    thumb_url = entries.get('media_thumbnail')
+    if thumb_url:
+        thumb_url = thumb_url[0].get('url')
+        thumb = os.path.join(Config.DOWN_PATH, f"{title}.{str(thumb_url).split('.')[-1]}")
+        if not os.path.exists(thumb):
+            await pool.run_in_thread(wget.download)(thumb_url, thumb)
+    if time:
+        time = _parse_time(time)[0]
+    if entries.get('authors'):
+        author = entries.get('authors')[0]['name'].split('/')[-1]
+        author_link = entries.get('authors')[0]['href']
+    out_str = f"""
+**New post Found**
+
+**Title:** `{title}`
+**Author:** [{author}]({author_link})
+**Last Updated:** `{time}`
+"""
+    markup = InlineKeyboardMarkup([[InlineKeyboardButton(text="View Post Online", url=link)]])
+    if thumb:
+        args = {
+            'caption': out_str,
+            'parse_mode': "md",
+            'reply_markup': markup if userge.has_bot else None
+        }
+    else:
+        args = {
+            'text': out_str,
+            'disable_web_page_preview': True,
+            'parse_mode': "md",
+            'reply_markup': markup if userge.has_bot else None
+        }
+    for chat_id in RSS_CHAT_ID:
         args.update({'chat_id': chat_id})
         try:
             await send_rss_to_telegram(userge.bot, args, thumb)
@@ -89,7 +127,6 @@ async def send_new_post(entries):
             await send_rss_to_telegram(userge, args, thumb)
 
 
-
 async def send_rss_to_telegram(client, args: dict, path: str = None):
     if path:
         if path.lower().endswith((".jpg", ".jpeg", ".png", ".bmp")):
@@ -102,7 +139,7 @@ async def send_rss_to_telegram(client, args: dict, path: str = None):
         await client.send_message(**args)
 
 
-@userge.on_cmd("addrss", about={
+@userge.on_cmd("addfeed", about={
     'header': "Add new Feed Url to get regular Updates from it.",
     'usage': "{tr}addfeed url"})
 async def add_rss_feed(msg: Message):
@@ -119,7 +156,7 @@ async def add_rss_feed(msg: Message):
     await msg.edit(out_str, log=__name__)
 
 
-@userge.on_cmd("drss", about={
+@userge.on_cmd("delfeed", about={
     'header': "Delete a existing Feed Url from Database.",
     'flags': {'-all': 'Delete All Urls.'},
     'usage': "{tr}delfeed title"})
@@ -135,7 +172,7 @@ async def delete_rss_feed(msg: Message):
     await msg.edit(out_str, log=__name__)
 
 
-@userge.on_cmd("lrss", about={
+@userge.on_cmd("listrss", about={
     'header': "List all feed URLs that you Subscribed.",
     'usage': "{tr}listrss"})
 async def list_rss_feed(msg: Message):
