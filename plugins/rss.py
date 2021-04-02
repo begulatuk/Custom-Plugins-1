@@ -62,7 +62,7 @@ async def delete_feed(url: str) -> str:
         out_str = f"""
 #DELETED_FEED_URL
 
-\t\t**FEED_ URL:** `{url}`
+\t\t**FEED_URL:** `{url}`
 """
         del RSS_DICT[url]
         await RSS_COLLECTION.delete_one({'url': url})
@@ -72,47 +72,8 @@ async def delete_feed(url: str) -> str:
 
 
 async def send_new_post(entries):
-    title = entries.get('title')
     link = entries.get('link')
-    time = entries.get('published')
-    thumb = None
-    author = None
-    author_link = None
-
-    thumb_url = entries.get('media_thumbnail')
-    if thumb_url:
-        thumb_url = thumb_url[0].get('url')
-        thumb = os.path.join(Config.DOWN_PATH, f"{title}.{str(thumb_url).split('.')[-1]}")
-        if not os.path.exists(thumb):
-            await pool.run_in_thread(wget.download)(thumb_url, thumb)
-    if time:
-        time = _parse_time(time)[0]
-    if entries.get('authors'):
-        author = entries.get('authors')[0]['name'].split('/')[-1]
-        author_link = entries.get('authors')[0]['href']
-#    out_str = f"""
-    out_str = f"/mirror `{link}`"
-#**New post Found**
-
-#**Title:** `{title}`
-#**Author:** [{author}]({author_link})
-#**Last Updated:** `{time}`
-#"""
-    #markup = InlineKeyboardMarkup([[InlineKeyboardButton(text="View Post Online", url=link)]])
-    if thumb:
-        args = {
-            'caption': out_str,
-            'parse_mode': "md",
-            'reply_markup': markup if userge.has_bot else None
-        }
-    else:
-        args = {
-            'text': out_str,
-            'disable_web_page_preview': True,
-            'parse_mode': "md",
-            'reply_markup': markup if userge.has_bot else None
-        }
-    for chat_id in RSS_CHAT_ID:
+    if chat_id in RSS_CHAT_ID:
         args.update({'chat_id': chat_id})
         try:
             await send_rss_to_telegram(userge.bot, args, thumb)
@@ -120,12 +81,13 @@ async def send_new_post(entries):
             ChatWriteForbidden, ChannelPrivate, ChatIdInvalid,
             UserNotParticipant, UsergeBotNotFound
         ):
-            out_str = f"/mirror `{link}`"
+            out_str += f"\n\n[View Post Online]({link})"
             if 'caption' in args:
                 args.update({'caption': out_str})
             else:
                 args.update({'text': out_str})
             await send_rss_to_telegram(userge, args, thumb)
+
 
 
 async def send_rss_to_telegram(client, args: dict, path: str = None):
@@ -157,7 +119,7 @@ async def add_rss_feed(msg: Message):
     await msg.edit(out_str, log=__name__)
 
 
-@userge.on_cmd("delrss", about={
+@userge.on_cmd("drss", about={
     'header': "Delete a existing Feed Url from Database.",
     'flags': {'-all': 'Delete All Urls.'},
     'usage': "{tr}delfeed title"})
