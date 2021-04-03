@@ -179,17 +179,19 @@ async def lydia_ai_chat(message: Message):
             ses_id = ses.id
         try:
             out = ''
-            await asyncio.sleep(10)
+            await asyncio.sleep(15)
             await userge.send_read_acknowledge(
                 chat_id=chat_id,
                 message=message,
                 clear_mentions=True)
             if not message.media and message.text:
-                await asyncio.sleep(10)
+                await asyncio.sleep(15)
                 out = await _think_lydia(ses_id, message.text)
             QUEUE.put_nowait((message, out))
         except CoffeeHouseError as cfe:
             LOGGER.log(f"#CoffeeHouseError {cfe}")
+            
+    await asyncio.sleep(10)              
     message.continue_propagation()
 
 
@@ -221,9 +223,11 @@ async def _custom_media_reply(message: Message):
         cus_msg = await message.client.get_messages(chat_id=CUSTOM_REPLY_CHANNEL,
                                                     message_ids=cus_msg)
         if cus_msg.service:
+            await asyncio.sleep(10)            
             await _custom_media_reply(message)
             return
         if cus_msg.media:
+            await asyncio.sleep(10)
             file_id = get_file_id_of_media(cus_msg)
             try:
                 if cus_msg.animation:
@@ -258,6 +262,7 @@ async def _custom_media_reply(message: Message):
                 await _custom_media_reply(message)
                 return
         if cus_msg.text:
+            await asyncio.sleep(10)
             await _send_text_like_a_human(message, cus_msg.text)
 
 
