@@ -115,8 +115,8 @@ async def send_new_post(entries):
         args.update({'chat_id': chat_id})                                                 
         try:
             if "720" in link:
-            await asyncio.sleep(10)
-            await send_rss_to_telegram(userge.bot, args, thumb)
+                await asyncio.sleep(10)
+                await send_rss_to_telegram(userge.bot, args, thumb)
         except (
             ChatWriteForbidden, ChannelPrivate, ChatIdInvalid,
             UserNotParticipant, UsergeBotNotFound
