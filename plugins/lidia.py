@@ -181,6 +181,7 @@ async def lydia_ai_chat(message: Message):
         try:
             out = ''
             _LOG.info("LIDIA")
+            _LOG.info(data)
             await asyncio.sleep(15)
             await userge.send_read_acknowledge(
                 chat_id=chat_id,
