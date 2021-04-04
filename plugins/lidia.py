@@ -19,6 +19,7 @@ from userge import userge, get_collection, Message, filters, pool
 from userge.utils import get_file_id_of_media
 
 LOGGER = userge.getCLogger(__name__)
+_LOG = logging.getLogger(__name__)
 LYDIA_CHATS = get_collection("LYDIA_CHATS")
 LYDIA_API = os.environ.get("LYDIA_API", None)
 CUSTOM_REPLY_CHANNEL = int(os.environ.get("CUSTOM_REPLY_CHANNEL", 0))
@@ -179,6 +180,7 @@ async def lydia_ai_chat(message: Message):
             ses_id = ses.id
         try:
             out = ''
+            _LOG.info("LIDIA")
             await asyncio.sleep(15)
             await userge.send_read_acknowledge(
                 chat_id=chat_id,
