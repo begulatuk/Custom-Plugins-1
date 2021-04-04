@@ -12,11 +12,11 @@ import re
 import asyncio
 from typing import Dict
 
-from userge import userge, Message, filters, get_collection
+from userge import userge, Message, filters, get_collection, logging
 
 FILTERS_COLLECTION = get_collection("filters")
 CHANNEL = userge.getCLogger(__name__)
-
+_LOG = logging.getLogger(__name__)
 FILTERS_DATA: Dict[int, Dict[str, int]] = {}
 FILTERS_CHATS = filters.create(lambda _, __, query: query.chat and query.chat.id in FILTERS_DATA)
 
@@ -189,12 +189,13 @@ async def chat_filter(message: Message) -> None:
                 l_name = name.lower()
                 input_text = message.text.strip().lower()
                 filter_text = re.search(l_name, input_text)
-                
+                await asyncio.sleep(5)                
                 if (input_text == l_name
                         or input_text.startswith(f"{l_name} ")
                         or input_text.endswith(f" {l_name}")
                         or filter_text is not None
                         or f" {l_name} " in input_text):
+                    _LOG.info(filter_text)                  
                     await asyncio.sleep(10)
                     reply = True
             if reply:
