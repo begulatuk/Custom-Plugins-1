@@ -20,10 +20,10 @@ from userge.utils import get_file_id_of_media
 
 LOGGER = userge.getCLogger(__name__)
 LYDIA_CHATS = get_collection("LYDIA_CHATS")
-CH_LYDIA_API = os.environ.get("CH_LYDIA_API", None)
+LYDIA_API = os.environ.get("LYDIA_API", None)
 CUSTOM_REPLY_CHANNEL = int(os.environ.get("CUSTOM_REPLY_CHANNEL", 0))
-if CH_LYDIA_API is not None:
-    LYDIA = LydiaAI(API(CH_LYDIA_API))
+if LYDIA_API is not None:
+    LYDIA = LydiaAI(API(LYDIA_API))
 
 ACTIVE_CHATS = {}
 CUSTOM_REPLIES_IDS = []
@@ -57,9 +57,9 @@ async def _init():
     'usage': "{tr}lydia [flag] [reply to user]"})
 async def lydia_session(message: Message):
     """ lydia command handler """
-    if CH_LYDIA_API is None:
+    if LYDIA_API is None:
         await message.edit(
-            "Please Configure `CH_LYDIA_API` & `CUSTOM_REPLY_CHANNEL`"
+            "Please Configure `LYDIA_API` & `CUSTOM_REPLY_CHANNEL`"
             "\n\nAll Instructions are available"
             " in @UnofficialPluginsHelp")
         return
@@ -159,7 +159,7 @@ async def lydia_session(message: Message):
 @userge.on_filters(~filters.me & ~filters.edited & (filters.mentioned | filters.private), group=2)
 async def lydia_ai_chat(message: Message):
     """ incomming message handler """
-    if CH_LYDIA_API is None:
+    if LYDIA_API is None:
         return
     data = None
     if message.from_user:
