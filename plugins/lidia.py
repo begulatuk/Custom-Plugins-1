@@ -15,7 +15,7 @@ from coffeehouse.lydia import LydiaAI, Session
 from coffeehouse.exception import CoffeeHouseError
 from pyrogram.errors.exceptions.bad_request_400 import PeerIdInvalid
 
-from userge import userge, get_collection, Message, filters, pool
+from userge import userge, get_collection, Message, filters, pool, logging
 from userge.utils import get_file_id_of_media
 
 LOGGER = userge.getCLogger(__name__)
