@@ -27,6 +27,7 @@ from userge import userge, Message, Config, logging, get_collection, pool
 
 RSS_CHAT_ID = [int(x) for x in os.environ.get("RSS_CHAT_ID", str(Config.LOG_CHANNEL_ID)).split()]
 _LOG = logging.getLogger(__name__)
+_LOG.info(RSS_CHAT_ID)
 
 RSS_DICT: Dict[str, List[datetime]] = {}
 
@@ -190,7 +191,7 @@ async def list_rss_feed(msg: Message):
 async def rss_worker():
     global TASK_RUNNING  # pylint: disable=global-statement
     TASK_RUNNING = True
-    chunk = 2
+    chunk = 20
     if RSS_DICT and RSS_CHAT_ID[0] == Config.LOG_CHANNEL_ID:
         _LOG.info(
             "You have to add var for `RSS_CHAT_ID`, for Now i will send in LOG_CHANNEL")
