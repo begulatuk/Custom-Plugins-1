@@ -202,7 +202,7 @@ async def chat_filter(message: Message) -> None:
                     await asyncio.sleep(5)
                     reply = True
             else:
-              _LOG.info(error)
+              _LOG.info("error")
               
             if reply:
                 await asyncio.sleep(15)
