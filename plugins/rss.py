@@ -199,7 +199,7 @@ async def rss_worker():
         for url in RSS_DICT:
             rss = await _parse(url)
             if len(rss.entries) > chunk:
-                entries = reversed(rss.entries[:chunk])
+                entries = reversed(rss.entries)
             else:
                 entries = reversed(rss.entries)
             for entry in entries:
@@ -218,7 +218,7 @@ async def rss_worker():
 
 
 def _parse_time(t: str) -> Tuple[datetime, datetime]:
-    _delta = timedelta(minutes=30)
+    _delta = timedelta(hours=5, minutes=30)
     parsed_time = (parser.parse(t) + _delta).replace(tzinfo=None)
     datetime_now = datetime.utcnow() + _delta
     return parsed_time, datetime_now
