@@ -74,22 +74,22 @@ async def delete_feed(url: str) -> str:
 async def send_new_post(entries):
     title = entries.get('title')
     link = entries.get('link')
-    time = entries.get('published')
+    time = None
     thumb = None
     author = None
     author_link = None
 
-    thumb_url = entries.get('media_thumbnail')
-    if thumb_url:
-        thumb_url = thumb_url[0].get('url')
-        thumb = os.path.join(Config.DOWN_PATH, f"{title}.{str(thumb_url).split('.')[-1]}")
-        if not os.path.exists(thumb):
-            await pool.run_in_thread(wget.download)(thumb_url, thumb)
-    if time:
-        time = _parse_time(time)[0]
-    if entries.get('authors'):
-        author = entries.get('authors')[0]['name'].split('/')[-1]
-        author_link = entries.get('authors')[0]['href']
+    #thumb_url = entries.get('media_thumbnail')
+    #if thumb_url:
+    #    thumb_url = thumb_url[0].get('url')
+    #    thumb = os.path.join(Config.DOWN_PATH, f"{title}.{str(thumb_url).split('.')[-1]}")
+    #    if not os.path.exists(thumb):
+    #        await pool.run_in_thread(wget.download)(thumb_url, thumb)
+    #if time:
+    #    time = _parse_time(time)[0]
+    #if entries.get('authors'):
+    #    author = entries.get('authors')[0]['name'].split('/')[-1]
+    #    author_link = entries.get('authors')[0]['href']
     out_str = f"""
 **New post Found**
 
@@ -112,10 +112,11 @@ async def send_new_post(entries):
             'reply_markup': markup if userge.has_bot else None
         }
     for chat_id in RSS_CHAT_ID:
-        args.update({'chat_id': chat_id})                                                 
+        args.update({'chat_id': chat_id})
         try:
             if "720" in link:
-                await asyncio.sleep(10)
+                _LOG.info("caption")    
+                await asyncio.sleep(5)
                 await send_rss_to_telegram(userge.bot, args, thumb)
         except (
             ChatWriteForbidden, ChannelPrivate, ChatIdInvalid,
@@ -123,9 +124,10 @@ async def send_new_post(entries):
         ):
             out_str = f"/mirror `{link}`"
             if 'caption' in args:
-                args.update({'caption': out_str})
+                _LOG.info("caption")
             else:
                 args.update({'text': out_str})
+            await asyncio.sleep(5)    
             await send_rss_to_telegram(userge, args, thumb)
 
 
