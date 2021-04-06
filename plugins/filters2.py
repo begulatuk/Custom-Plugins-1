@@ -12,6 +12,8 @@ import re
 import asyncio
 from typing import Dict
 
+from pyrogram.errors import FloodWait
+
 from userge import userge, Message, filters, get_collection, logging
 
 FILTERS_COLLECTION = get_collection("filters")
@@ -186,6 +188,7 @@ async def chat_filter(message: Message) -> None:
                     await asyncio.sleep(20)
                     reply = True
             elif message.text:
+                await asyncio.sleep(5)
                 l_name = name.lower()
                 input_text = message.text.strip().lower()
                 filter_text = re.search(l_name, input_text)
@@ -196,10 +199,13 @@ async def chat_filter(message: Message) -> None:
                         or filter_text is not None
                         or f" {l_name} " in input_text):
                     _LOG.info(filter_text)                  
-                    await asyncio.sleep(10)
+                    await asyncio.sleep(5)
                     reply = True
+            else:
+              _LOG.info(error)
+              
             if reply:
-                await asyncio.sleep(10)
+                await asyncio.sleep(15)
                 await CHANNEL.forward_stored(client=message.client,
                                              message_id=FILTERS_DATA[message.chat.id][name],
                                              chat_id=message.chat.id,
