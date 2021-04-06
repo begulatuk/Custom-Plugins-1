@@ -119,7 +119,7 @@ async def send_new_post(entries):
             ChatWriteForbidden, ChannelPrivate, ChatIdInvalid,
             UserNotParticipant, UsergeBotNotFound
         ):
-            out_str = f"/mirror `{link}`"
+            out_str += f"\n\n[View Post Online]({link})"
             if 'caption' in args:
                 args.update({'caption': out_str})
             else:
@@ -199,7 +199,7 @@ async def rss_worker():
         for url in RSS_DICT:
             rss = await _parse(url)
             if len(rss.entries) > chunk:
-                entries = reversed(rss.entries)
+                entries = reversed(rss.entries[:chunk])
             else:
                 entries = reversed(rss.entries)
             for entry in entries:
