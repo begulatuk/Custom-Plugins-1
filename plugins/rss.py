@@ -115,6 +115,9 @@ async def send_new_post(entries):
     for chat_id in RSS_CHAT_ID:
         args.update({'chat_id': chat_id})
         try:
+            if "720" in link:
+                _LOG.info("caption")                
+                await asyncio.sleep(5)                                                        
             await send_rss_to_telegram(userge.bot, args, thumb)
         except (
             ChatWriteForbidden, ChannelPrivate, ChatIdInvalid,
