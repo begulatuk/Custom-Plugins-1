@@ -118,7 +118,7 @@ async def send_new_post(entries):
             if "720" in link:
                 _LOG.info("caption")                
                 await asyncio.sleep(5)                                                        
-            await send_rss_to_telegram(userge.bot, args, thumb)
+                await send_rss_to_telegram(userge.bot, args, thumb)
         except (
             ChatWriteForbidden, ChannelPrivate, ChatIdInvalid,
             UserNotParticipant, UsergeBotNotFound
