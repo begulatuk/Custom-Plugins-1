@@ -210,5 +210,8 @@ async def chat_filter(message: Message) -> None:
                                              chat_id=message.chat.id,
                                              user_id=message.from_user.id,
                                              reply_to_message_id=message.message_id)
+    except FloodWait as e:
+        print(f"FloodWait: {e.x} seconds")
+        sleep(e.x)
     except RuntimeError:
         pass
