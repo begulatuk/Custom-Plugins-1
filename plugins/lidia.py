@@ -181,20 +181,25 @@ async def lydia_ai_chat(message: Message):
         try:
             out = ''
             _LOG.info("LIDIA")
-            _LOG.info(data)
-            await asyncio.sleep(15)
+            _LOG.info(chat_id)
+            await asyncio.sleep(5)
             await userge.send_read_acknowledge(
                 chat_id=chat_id,
                 message=message,
                 clear_mentions=True)
             if not message.media and message.text:
-                await asyncio.sleep(15)
+                await asyncio.sleep(10)
                 out = await _think_lydia(ses_id, message.text)
             QUEUE.put_nowait((message, out))
+        except FloodWait as e:
+            print(f"FloodWait: {e.x} seconds")
+            sleep(e.x)
         except CoffeeHouseError as cfe:
             LOGGER.log(f"#CoffeeHouseError {cfe}")
+        
             
-    await asyncio.sleep(10)              
+            
+    await asyncio.sleep(5)              
     message.continue_propagation()
 
 
