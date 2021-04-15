@@ -192,19 +192,19 @@ async def chat_filter(message: Message) -> None:
                 l_name = name.lower()
                 input_text = message.text.strip().lower()
                 filter_text = re.search(l_name, input_text)
-                await asyncio.sleep(5)                
+                #await asyncio.sleep(5)                
                 if (input_text == l_name
                         or input_text.startswith(f"{l_name} ")
                         or input_text.endswith(f" {l_name}")
                         or filter_text is not None
                         or f" {l_name} " in input_text):
                     _LOG.info(filter_text)                  
-                    await asyncio.sleep(5)
+                    #await asyncio.sleep(5)
                     reply = True
                 
               
             if reply:
-                await asyncio.sleep(15)
+               # await asyncio.sleep(15)
                 await CHANNEL.forward_stored(client=message.client,
                                              message_id=FILTERS_DATA[message.chat.id][name],
                                              chat_id=message.chat.id,
